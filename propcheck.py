@@ -2,7 +2,19 @@
 import fnmatch
 import os
 import re
-path = "."
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--strict", help="strict mode", action="store_true")
+parser.add_argument("--path", help="strict mode")
+args = parser.parse_args()
+
+strict = args.strict
+if args.path:
+    path = args.path
+else:
+    path = "."
 
 files = [os.path.join(dirpath, f)
     for dirpath, dirnames, files in os.walk(path)
@@ -11,8 +23,6 @@ files = [os.path.join(dirpath, f)
 
 
 def check(line,file,lineno):
-    
-    strict = False
     
     accessors = re.search(r"\(([^)]*)\)",line)
     if not accessors:
